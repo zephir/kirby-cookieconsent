@@ -24,7 +24,7 @@ class Options
 
     private static function getSimpleOptions()
     {
-        return array_replace_recursive([
+        return array_replace_recursive(
             self::getBaseOptions(),
             [
                 'languages' => [
@@ -38,7 +38,7 @@ class Options
                     ]
                 ]
             ]
-        ]);
+        );
     }
 
     private static function getCustomizableOptions()

@@ -1,6 +1,6 @@
 # Kirby 3 Cookieconsent plugin
 
-[cover](docs/cover.jpg)
+![cover](docs/cover.jpg)
 
 A plugin to implement [cookieconsent](https://github.com/orestbida/cookieconsent) into Kirby 3.
 
