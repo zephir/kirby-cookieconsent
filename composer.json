@@ -1,0 +1,27 @@
+{
+    "name": "zephir/kirby-cookieconsent",
+    "description": "Kirby cookieconsent plugin",
+    "license": "MIT",
+    "type": "kirby-plugin",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "Marc Stampfli",
+            "email": "marc@zephir.ch"
+        }
+    ],
+    "require": {
+        "getkirby/composer-installer": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Zephir\\Cookieconsent\\": "src/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "getkirby/composer-installer": true
+        }
+    }
+}
