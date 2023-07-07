@@ -28,7 +28,7 @@ class Options
 
     private static function getSimpleOptions()
     {
-        return array_merge_recursive(
+        return array_replace_recursive(
             self::getBaseOptions(),
             [
                 'languages' => [
