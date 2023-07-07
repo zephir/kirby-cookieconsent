@@ -3,7 +3,7 @@
     "description": "Kirby cookieconsent plugin",
     "license": "MIT",
     "type": "kirby-plugin",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "authors": [
         {
             "name": "Marc Stampfli",
