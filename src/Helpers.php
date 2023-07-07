@@ -7,11 +7,7 @@ class Helpers
 
     public static function getCookieconsentTranslation($key)
     {
-        if (option('languages')) {
-            return t($key);
-        }
-
-        return option("zephir.cookieconsent.content.$key");
+        return t($key, null, option('languages') ? null : option('zephir.cookieconsent.defaultLocale'));
     }
 
     public static function getInitJs()

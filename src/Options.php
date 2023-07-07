@@ -4,6 +4,10 @@ namespace Zephir\Cookieconsent;
 
 class Options
 {
+    /**
+     * @param string $type
+     * @return array
+     */
     public static function get($type)
     {
         $allOptions = [
@@ -16,7 +20,7 @@ class Options
             $options = isset($allOptions[$type]) ? $allOptions[$type] : $allOptions['simple'];
         }
 
-        return array_replace_recursive(
+        return array_merge_recursive(
             $options,
             kirby()->option('zephir.cookieconsent.extend')
         );
@@ -24,7 +28,7 @@ class Options
 
     private static function getSimpleOptions()
     {
-        return array_replace_recursive(
+        return array_merge_recursive(
             self::getBaseOptions(),
             [
                 'languages' => [
@@ -51,7 +55,6 @@ class Options
         return [
             'current_lang' => 'kirby',
             'page_scripts' => true,
-            'remove_cookie_tables' => true,
             'languages' => [
                 'kirby' => [
                     'consent_modal' => [

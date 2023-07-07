@@ -6,8 +6,8 @@
 
 # Source files
 assets/src/ export-ignore
-package.json
-yarn.lock
+package.json export-ignore
+yarn.lock export-ignore
 
 # Editorconfigs
 .editorconfig export-ignore

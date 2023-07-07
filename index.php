@@ -36,13 +36,13 @@ Kirby::plugin('zephir/cookieconsent', [
 		'type' => 'simple',
 		'activeBlocks' => [
 			'necessary' => true,
-			'functionality' => true,
-			'experience' => true,
+			'functionality' => false,
+			'experience' => false,
 			'measurement' => true,
-			'marketing' => true
+			'marketing' => false
 		],
-		'override' => [],
-		'content' => $languages['de'],
+		'extend' => [],
+		'defaultLocale' => 'de',
 		'cdn' => false
 	],
 	'translations' => [
