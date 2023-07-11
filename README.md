@@ -7,10 +7,10 @@ A plugin to implement [cookieconsent](https://github.com/orestbida/cookieconsent
 - Uses the open source cookieconsent library
 - Provides two default configurations to get you started quickly
 - Provides several "blocks" for different cookies
-- Multilingual support
+- Multilingual support (currently comes with translations for English, German and soon French, but can be extended in the project or through a PR)
 - Fully customizable
 
-> The plugin needs Kirby 3 and PHP 8 or
+> The plugin needs Kirby 3 and PHP 8 or higher to work.
 
 ## Table of Contents
 
