@@ -39,17 +39,17 @@ This version of the plugin requires PHP 8.0 and Kirby 3.6.0 or higher. The recom
 ### 1.1 Composer
 
 ```
-composer require zephir/cookieconsent
+composer require zephir/kirby-cookieconsent
 ```
 
 ### 1.2 Download
 
-Download and copy this repository to `/site/plugins/cookieconsent`.
+Download and copy this repository to `/site/plugins/kirby-cookieconsent`.
 
 ### 1.3 Git submodule
 
 ```
-git submodule add https://github.com/zephir/kirby-cookieconsent.git site/plugins/cookieconsent
+git submodule add https://github.com/zephir/kirby-cookieconsent.git site/plugins/kirby-cookieconsent
 ```
 
 ## 2. Setup
