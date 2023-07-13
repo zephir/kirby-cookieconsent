@@ -27,10 +27,13 @@ A plugin to implement [cookieconsent](https://github.com/orestbida/cookieconsent
     - [3.3. Types](#33-types)
     - [3.4. Provided cookie blocks](#34-provided-cookie-blocks)
     - [3.5 Extend](#35-extend)
-  - [4. Practical examples](#4-practical-examples)
-    - [4.1 Revisions](#41-revisions)
-    - [4.2 Layout customization](#42-layout-customization)
-    - [4.3 Autoclear cookies](#43-autoclear-cookies)
+  - [4. Translations](#4-translations)
+    - [4.1 Extending translations in site](#41-extending-translations-in-site)
+    - [4.1 Extending by PR](#42-extending-by-pr)
+  - [5. Practical examples](#5-practical-examples)
+    - [5.1 Revisions](#51-revisions)
+    - [5.2 Layout customization](#52-layout-customization)
+    - [5.3 Autoclear cookies](#53-autoclear-cookies)
 
 ## 1. Installation
 
@@ -69,12 +72,12 @@ By default, the plugin displays the `simple` type with only accept/reject button
 | extend        | array   | `[]`                   | Extend the `simple` / `customizable` configuration or provide your own if `null` / `false` is given as `type`.                      |
 | cdn           | boolean | `false`                | Whether to load the cookieconsent assets from jsdelivr.net or use the compiled assets provided with this plugin.                    |
 
-You can set all [cookieconset](https://github.com/orestbida/cookieconsent) options using the `extend` option.
+You can set all [cookieconsent](https://github.com/orestbida/cookieconsent) options using the `extend` option.
 
 ### 3.2 Defaults
 
 ```php
-[
+'zephir.cookieconsent' => [
     'type' => 'simple',
     'defaultLocale' => 'de',
     'activeBlocks' => [
@@ -102,7 +105,7 @@ The `type` option can be used to load preconfigured variations of the cookiecons
 ### 3.4 Provided cookie blocks
 
 Blocks allow you to granularly configure which scripts to load and which not to.
-See [cookieconset](https://github.com/orestbida/cookieconsent) for more information.
+See [cookieconsent](https://github.com/orestbida/cookieconsent) for more information.
 
 Blocks provided by this plugin:
 
@@ -134,11 +137,24 @@ With the `extend` option you can extend any of the options set by either type, o
 
 If you extend one of the basic types, be aware that the language in the `languages` array (`extend.languages`) is `kirby` and the `current_language` is also `kirby`. This is so because we use the kirby translation option instead of the one provided by the cookieconsent js plugin.
 
-## 4. Practical examples
+## 4. Translations
+
+You can extend the plugin translations by providing your own translations in your sites languages file or by creating a PR for this project.
+
+### 4.1 Extending translations in site
+
+Go to your sites `languages/{lang}.php` file and extend the `translations` key (https://getkirby.com/docs/guide/languages/introduction).
+You can find all used keys in [kirby-cookieconsent/languages/en.php](https://github.com/zephir/kirby-cookieconsent/blob/main/languages/en.php).
+
+### 4.2 Extending by PR
+
+Fork this repository, copy en/de.php in the [languages](https://github.com/zephir/kirby-cookieconsent/blob/main/languages) folder, translate all values and create a PR. Thanks!
+
+## 5. Practical examples
 
 > The PHP sections in the following sections will refer to the kirby `config.php`.
 
-### 4.1 Revisions
+### 5.1 Revisions
 
 In case of changes to the config, to show the cookie modal to people that already consented, you can use the `revision` option.
 See [cookieconsent#how-to-manage-revision](https://github.com/orestbida/cookieconsent#how-to-manage-revisions).
@@ -156,7 +172,7 @@ See [cookieconsent#how-to-manage-revision](https://github.com/orestbida/cookieco
 
 </details>
 
-### 4.2 Layout customization
+### 5.2 Layout customization
 
 See [cookieconsent#layout-options--customization](https://github.com/orestbida/cookieconsent#layout-options--customization).
 
@@ -185,7 +201,7 @@ See [cookieconsent#layout-options--customization](https://github.com/orestbida/c
 
 </details>
 
-### 4.3 Autoclear cookies
+### 5.3 Autoclear cookies
 
 See [cookieconsent#how-to-clear-cookies](https://github.com/orestbida/cookieconsent#how-to-clear-cookies).
 
