@@ -10,6 +10,6 @@
     "parcel": "^2.1.1"
   },
   "dependencies": {
-    "vanilla-cookieconsent": "^2.9.1"
+    "vanilla-cookieconsent": "^2.9.2"
   }
 }

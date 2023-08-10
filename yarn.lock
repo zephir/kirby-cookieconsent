@@ -1537,10 +1537,10 @@ utility-types@^3.10.0:
   resolved "https://registry.yarnpkg.com/utility-types/-/utility-types-3.10.0.tgz#ea4148f9a741015f05ed74fd615e1d20e6bed82b"
   integrity sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg==
 
-vanilla-cookieconsent@^2.9.1:
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/vanilla-cookieconsent/-/vanilla-cookieconsent-2.9.1.tgz#db6ba5abdb6c0221ef399702b7a0c3f473791b95"
-  integrity sha512-53SFENm1+nSOvuH8nEYRVB21gsYHnoglKD7Py9q1f9RSC4nkOOY5v3IE9rXh7g1vBLFnCtzlaFmJLm8/Y94iOQ==
+vanilla-cookieconsent@^2.9.2:
+  version "2.9.2"
+  resolved "https://registry.yarnpkg.com/vanilla-cookieconsent/-/vanilla-cookieconsent-2.9.2.tgz#d4ac2169fdde5e76f7b8345d0dbfb9b946fe99f0"
+  integrity sha512-SHAS5W0DBvvcUtjmVvvYkhmLPmTlgwKzFvViUp5mBimbZCdZKbDQzwyk/TgYq02+61RrtxmDdLGzDWNFpSbsGQ==
 
 weak-lru-cache@^1.2.2:
   version "1.2.2"
