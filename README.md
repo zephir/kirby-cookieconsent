@@ -7,7 +7,7 @@ A plugin to implement [cookieconsent](https://github.com/orestbida/cookieconsent
 - Uses the open source cookieconsent library
 - Provides two default configurations to get you started quickly
 - Provides several "blocks" for different cookies
-- Multilingual support (currently comes with translations for English, German and soon French, but can be extended in the project or through a PR)
+- Multilingual support (currently comes with translations for English, German and French, but can be extended in the project or through a PR)
 - Fully customizable
 
 > The plugin needs Kirby 3 and PHP 8 or higher to work.
@@ -25,15 +25,19 @@ A plugin to implement [cookieconsent](https://github.com/orestbida/cookieconsent
     - [3.1 Available options](#31-available-options)
     - [3.2 Defaults](#32-defaults)
     - [3.3. Types](#33-types)
-    - [3.4. Provided cookie blocks](#34-provided-cookie-blocks)
+    - [3.4 Provided cookie blocks](#34-provided-cookie-blocks)
     - [3.5 Extend](#35-extend)
   - [4. Translations](#4-translations)
     - [4.1 Extending translations in site](#41-extending-translations-in-site)
-    - [4.1 Extending by PR](#42-extending-by-pr)
-  - [5. Practical examples](#5-practical-examples)
-    - [5.1 Revisions](#51-revisions)
-    - [5.2 Layout customization](#52-layout-customization)
-    - [5.3 Autoclear cookies](#53-autoclear-cookies)
+    - [4.2 Extending by PR](#42-extending-by-pr)
+  - [5. Events](#5-events)
+  - [6. Practical examples](#6-practical-examples)
+    - [6.1 Revisions](#61-revisions)
+    - [6.2 Layout customization](#62-layout-customization)
+    - [6.3 Autoclear cookies](#63-autoclear-cookies)
+  - [License](#license)
+  - [Credits](#credits)
+
 
 ## 1. Installation
 
@@ -150,11 +154,39 @@ You can find all used keys in [kirby-cookieconsent/languages/en.php](https://git
 
 Fork this repository, copy en/de.php in the [languages](https://github.com/zephir/kirby-cookieconsent/blob/main/languages) folder, translate all values and create a PR. Thanks!
 
-## 5. Practical examples
+## 5. Events
+
+The cookieconsent js plugin comes with several callbacks.
+Since you don't have direct access to the js object, you can listen to the callbacks through events.
+
+```js
+// onAccept
+window.addEventListener
+    "cookieConsentAccept",
+    e => console.log("accept", e.detail.cookie)
+)
+
+// onChange
+window.addEventListener(
+    "cookieConsentChanged",
+    e => console.log("changed", e.detail.cookie, e.detail.changed_categories)
+)
+
+// onFirstAction
+window.addEventListener(
+    "cookieConsentFirstAction",
+    e => console.log("firstAction", e.detail.cookie, e.detail.user_preferences)
+)
+
+```
+
+You can find more informations regarding the callbacks [here](https://github.com/orestbida/cookieconsent#available-callbacks).
+
+## 6. Practical examples
 
 > The PHP sections in the following sections will refer to the kirby `config.php`.
 
-### 5.1 Revisions
+### 6.1 Revisions
 
 In case of changes to the config, to show the cookie modal to people that already consented, you can use the `revision` option.
 See [cookieconsent#how-to-manage-revision](https://github.com/orestbida/cookieconsent#how-to-manage-revisions).
@@ -172,7 +204,7 @@ See [cookieconsent#how-to-manage-revision](https://github.com/orestbida/cookieco
 
 </details>
 
-### 5.2 Layout customization
+### 6.2 Layout customization
 
 See [cookieconsent#layout-options--customization](https://github.com/orestbida/cookieconsent#layout-options--customization).
 
@@ -201,7 +233,7 @@ See [cookieconsent#layout-options--customization](https://github.com/orestbida/c
 
 </details>
 
-### 5.3 Autoclear cookies
+### 6.3 Autoclear cookies
 
 See [cookieconsent#how-to-clear-cookies](https://github.com/orestbida/cookieconsent#how-to-clear-cookies).
 
