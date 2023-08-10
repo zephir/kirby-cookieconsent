@@ -45,8 +45,5 @@ Kirby::plugin('zephir/cookieconsent', [
 		'defaultLocale' => 'de',
 		'cdn' => false
 	],
-	'translations' => [
-		'de' => $languages['de'],
-		'en' => $languages['en']
-	]
+	'translations' => $languages
 ]);
