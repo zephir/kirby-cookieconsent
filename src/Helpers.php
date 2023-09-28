@@ -32,6 +32,9 @@ class Helpers
                     }
                 }
             ));
+
+            const event = new CustomEvent('cookieConsentInitialized', { detail: { cc } });
+            window.dispatchEvent(event);
         ";
     }
 

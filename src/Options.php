@@ -20,7 +20,7 @@ class Options
             $options = isset($allOptions[$type]) ? $allOptions[$type] : $allOptions['simple'];
         }
 
-        return array_merge_recursive(
+        return array_replace_recursive(
             $options,
             kirby()->option('zephir.cookieconsent.extend')
         );
