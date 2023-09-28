@@ -159,7 +159,16 @@ Fork this repository, copy en/de.php in the [languages](https://github.com/zephi
 The cookieconsent js plugin comes with several callbacks.
 Since you don't have direct access to the js object, you can listen to the callbacks through events.
 
+You can also use the cookieConsentInitialized event, which will give you the cookieconsent object on which you can call functions like `showSettings()`.
+
 ```js
+
+// onCookieConsentInitialization
+window.addEventListener(
+    "cookieConsentInitialized",
+    e => console.log("initialized", e.detail.cc)
+)
+
 // onAccept
 window.addEventListener
     "cookieConsentAccept",
