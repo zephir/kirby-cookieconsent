@@ -102,7 +102,10 @@ Add `snippet('cookieconsentCss')` to your header and `snippet('cookieconsentJs')
             'enabled' => true,
             'readOnly' => true
         ],
-        'measurement' => []
+        'measurement' => [],
+        'functionality' => [],
+        'experience' => [],
+        'marketing' => []
     ],
     'translations' => [
         'de' => require_once(__DIR__ . '/translations/de.php'),
@@ -122,14 +125,15 @@ Categories that are predefined by this plugin:
 | Name          | Enabled | Description                                                                                                                          |
 | ------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | necessary     | ✅      | The necessary cookies, can't be disabled by the user.                                                                                |
-| functionality | ❌      | Cookies for basic functionality and communication.                                                                                   |
-| experience    | ❌      | Cookies to improve the quality of the user experience and enable the user to interact with external content, networks and platforms. |
+| functionality | ✅      | Cookies for basic functionality and communication.                                                                                   |
+| experience    | ✅      | Cookies to improve the quality of the user experience and enable the user to interact with external content, networks and platforms. |
 | measurement   | ✅      | Cookies that help to measure traffic and analyze behavior.                                                                           |
-| marketing     | ❌      | These cookies help us to deliver personalized ads or marketing content to you, and to measure their performance.                     |
+| marketing     | ✅      | These cookies help us to deliver personalized ads or marketing content to you, and to measure their performance.                     |
 
 > Predefined means that there are translations in all languages for each category. The translations essentialy control which categories exist.
 
-To enable/disable categories you can use the `categories` option of the plugin:
+To enable/disable categories you can use the `categories` option of the plugin.  
+Be aware that disabling a category also requires you to update the translation files.
 
 ```php
 'zephir.cookieconsent' => [
