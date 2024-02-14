@@ -1,20 +1,17 @@
-# Kirby 3 Cookieconsent plugin
+# Kirby Cookieconsent plugin
 
-![cover](docs/cover.jpg)
+![cover](docs/cover.png)
 
-A plugin to implement [cookieconsent](https://github.com/orestbida/cookieconsent) in Kirby 3.
+A plugin to implement [cookieconsent](https://github.com/orestbida/cookieconsent) in Kirby.
 
 - Uses the open source cookieconsent library
-- Provides two default configurations to get you started quickly
-- Provides several "blocks" for different cookies
-- Multilingual support (currently comes with translations for English, German and French, but can be extended in the project or through a PR)
-- Fully customizable
-
-> The plugin needs Kirby 3 and PHP 8 or higher to work.
+- Provides default translations for 5 cookie categories
+- Multilingual support (EN/DE/FR)
+- Customizable
 
 ## Table of Contents
 
-- [Kirby 3 Cookieconsent plugin](#kirby-3-cookieconsent-plugin)
+- [Kirby Cookieconsent plugin](#kirby-cookieconsent-plugin)
   - [Table of Contents](#table-of-contents)
   - [1. Installation](#1-installation)
     - [1.1 Composer](#11-composer)
@@ -24,24 +21,17 @@ A plugin to implement [cookieconsent](https://github.com/orestbida/cookieconsent
   - [3. Options](#3-options)
     - [3.1 Available options](#31-available-options)
     - [3.2 Defaults](#32-defaults)
-    - [3.3. Types](#33-types)
-    - [3.4 Provided cookie blocks](#34-provided-cookie-blocks)
-    - [3.5 Extend](#35-extend)
+    - [3.3 Predefined cookie categories](#33-predefined-cookie-categories)
   - [4. Translations](#4-translations)
-    - [4.1 Extending translations in site](#41-extending-translations-in-site)
-    - [4.2 Extending by PR](#42-extending-by-pr)
+    - [4.1 Overriding specific translations](#41-overriding-specific-translations)
   - [5. Events](#5-events)
-  - [6. Practical examples](#6-practical-examples)
-    - [6.1 Revisions](#61-revisions)
-    - [6.2 Layout customization](#62-layout-customization)
-    - [6.3 Autoclear cookies](#63-autoclear-cookies)
   - [License](#license)
   - [Credits](#credits)
 
 
 ## 1. Installation
 
-This version of the plugin requires PHP 8.0 and Kirby 3.6.0 or higher. The recommended way of installing is by using Composer.
+The recommended way of installing is by using Composer.
 
 ### 1.1 Composer
 
@@ -62,56 +52,72 @@ git submodule add https://github.com/zephir/kirby-cookieconsent.git site/plugins
 ## 2. Setup
 
 Add `snippet('cookieconsentCss')` to your header and `snippet('cookieconsentJs')` to your footer.
-By default, the plugin displays the `simple` type with only accept/reject buttons and consent for necessary and measurement cookies.
 
 ## 3. Options
 
 ### 3.1 Available options
 
-| Option        | Type    | Default                | Description                                                                                                                         |
-| ------------- | ------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| type          | string  | `"simple"`             | The preconfigured plugin type. Use either `"simple"`, `"customizable"` or `null`/`false`. See [types](#types) for more information. |
-| defaultLocale | string  | `"de"`                 | The fallback language if you don't use multiple languages.                                                                          |
-| activeBlocks  | array   | [see below](#defaults) | Define which blocks are active, see [blocks](#default-cookie-blocks) for more information.                                          |
-| extend        | array   | `[]`                   | Extend the `simple` / `customizable` configuration or provide your own if `null` / `false` is given as `type`.                      |
-| cdn           | boolean | `false`                | Whether to load the cookieconsent assets from jsdelivr.net or use the compiled assets provided with this plugin.                    |
-
-You can set all [cookieconsent](https://github.com/orestbida/cookieconsent) options using the `extend` option.
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| root | string | `"document.body"` | [Root (parent) element where the modal will be appended as a last child.](https://cookieconsent.orestbida.com/reference/configuration-reference.html#root) |
+| autoShow | boolean | `true` | [Automatically show the consent modal if consent is not valid.](https://cookieconsent.orestbida.com/reference/configuration-reference.html#autoshow) |
+| revision | integer | `1` | [Manages consent revisions; useful if you'd like to ask your users again for consent after a change in your cookie/privacy policy.](https://cookieconsent.orestbida.com/advanced/revision-management.html#enable-revisions) |
+| autoClearCookies | boolean | `true` | [Clears cookies when user rejects a specific category. It requires a valid autoClear array.](https://cookieconsent.orestbida.com/reference/configuration-reference.html#autoclearcookies) |
+| hideFromBots | boolean | `true` | [Stops the plugin's execution when a bot/crawler is detected, to prevent them from indexing the modal's content.](https://cookieconsent.orestbida.com/reference/configuration-reference.html#hidefrombots) |
+| disablePageInteraction | boolean | `true` | [Creates a dark overlay and blocks the page scroll until consent is expressed.](https://cookieconsent.orestbida.com/reference/configuration-reference.html#disablepageinteraction) |
+| lazyHtmlGeneration | boolean | `true` | [Delays the generation of the modal's markup until they're about to become visible, to improve the TTI score. You can detect when a modal is ready/created via the onModalReady callback.](https://cookieconsent.orestbida.com/reference/configuration-reference.html#lazyhtmlgeneration) |
+| guiOptions | array | [see below](#32-defaults) | [You can extensively customize both the color scheme and the layout, based on your needs.](https://cookieconsent.orestbida.com/advanced/ui-customization.html) |
+| categories | array | [see below](#32-defaults) | [Use to define your cookie categories.](https://cookieconsent.orestbida.com/reference/configuration-reference.html#categories) |
+| translations | array | [see below](#32-defaults) | An array of translations for each language. |
+| cdn | boolean | `false` | Whether to load the cookieconsent assets from jsdelivr.net or use the compiled assets provided with this plugin. |
 
 ### 3.2 Defaults
 
 ```php
 'zephir.cookieconsent' => [
-    'type' => 'simple',
-    'defaultLocale' => 'de',
-    'activeBlocks' => [
-        'necessary' => true,
-        'functionality' => false,
-        'experience' => false,
-        'measurement' => true,
-        'marketing' => false
+    'cdn' => false,
+    'revision' => 1,
+    'root' => 'document.body',
+    'autoClearCookies' => true, // Only works when the categories has an autoClear array
+    'autoShow' => true,
+    'hideFromBots' => true,
+    'disablePageInteraction' => false,
+    'lazyHtmlGeneration' => true,
+    'guiOptions' => [
+        'consentModal' => [
+            'layout' => 'box',
+            'position' => 'bottom right',
+            'flipButtons' => false,
+            'equalWeightButtons' => true
+        ],
+        'preferencesModal' => [
+            'layout' => 'box',
+            // 'position' => 'left', // only relevant with the "bar" layout
+            'flipButtons' => false,
+            'equalWeightButtons' => true
+        ]
     ],
-    'extend' => [],
-    'cdn' => false
+    'categories' => [
+        'necessary' => [
+            'enabled' => true,
+            'readOnly' => true
+        ],
+        'measurement' => []
+    ],
+    'translations' => [
+        'de' => require_once(__DIR__ . '/translations/de.php'),
+        'en' => require_once(__DIR__ . '/translations/en.php'),
+        'fr' => require_once(__DIR__ . '/translations/fr.php')
+    ]
 ]
 ```
 
-### 3.3. Types
+### 3.3 Predefined cookie categories
 
-The `type` option can be used to load preconfigured variations of the cookieconsent plugin.
+Each cookie category can be used to control certain scripts.
+To learn how to manage scripts, head over to the [CookieConsent documentation](https://cookieconsent.orestbida.com/advanced/manage-scripts.html#how-to-manage-scripts).
 
-| Option value     | Description                                                                                                                                                                                                           |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `"simple"`       | This type displays only the cookie title, description and an accept/reject button. The accept button will accept all enabled [blocks](#default-cookie-blocks). The reject button will only allow the necessary block. |
-| `"customizable"` | With this type, the user will have an Accept button that accepts all enabled blocks and a Settings button that allows the user to customize which enabled [blocks](#default-cookie-blocks) they agree to.             |
-| `null` / `false` | No default type will be loaded and you will have to provide all the settings yourself using the `extend' option.                                                                                                      |
-
-### 3.4 Provided cookie blocks
-
-Blocks allow you to granularly configure which scripts to load and which not to.
-See [cookieconsent](https://github.com/orestbida/cookieconsent) for more information.
-
-Blocks provided by this plugin:
+Categories that are predefined by this plugin:
 
 | Name          | Enabled | Description                                                                                                                          |
 | ------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------ |
@@ -121,197 +127,86 @@ Blocks provided by this plugin:
 | measurement   | ✅      | Cookies that help to measure traffic and analyze behavior.                                                                           |
 | marketing     | ❌      | These cookies help us to deliver personalized ads or marketing content to you, and to measure their performance.                     |
 
-> In this context, "enabled" means that the cookie block is available on the website (and can be toggled by the user if not "necessary").
+> Predefined means that there are translations in all languages for each category. The translations essentialy control which categories exist.
 
-To enable/disable the blocks, use the `activeBlocks` options array.
+To enable/disable categories you can use the `categories` option of the plugin:
 
-You can then use these blocks to enable scripts when permission has been granted:
-
-```js
-<script type="text/plain" data-cookiecategory="necessary">
-  console.log('Necessary scripts enabled');
-</script>
+```php
+'zephir.cookieconsent' => [
+    'categories' => [
+        'necessary' => [
+            'enabled' => true,
+            'readOnly' => true
+        ],
+        'measurement' => [],
+        'functionality' => [],
+        'experience' => [],
+        'marketing' => []
+    ],
+]
 ```
 
-See [cookieconsent#how-to-blockmanage-scripts](https://github.com/orestbida/cookieconsent#how-to-blockmanage-scripts) for more information.
-
-### 3.5 Extend
-
-With the `extend` option you can extend any of the options set by either type, or completly provide your own options for the cookieconsent js plugin.
-
-If you extend one of the basic types, be aware that the language in the `languages` array (`extend.languages`) is `kirby` and the `current_language` is also `kirby`. This is so because we use the kirby translation option instead of the one provided by the cookieconsent js plugin.
+> An empty array defines the category with the default options. You can pass additional options like `enabled` or `readOnly` in the array.
+> Learn more about those options in the [CookieConsent Documentation](https://cookieconsent.orestbida.com/reference/configuration-reference.html#categories).
 
 ## 4. Translations
 
-You can extend the plugin translations by providing your own translations in your sites languages file or by creating a PR for this project.
+The translations are a central part of the plugin. By default we provide translations for EN, DE, FR and the categories mentioned in [3.3 Predefined cookie categories](#33-predefined-cookie-categories).
+To customise or override the default translations, you will need to use the `translations` option.
 
-### 4.1 Extending translations in site
+### 4.1 Overriding specific translations
 
-Go to your sites `languages/{lang}.php` file and extend the `translations` key (https://getkirby.com/docs/guide/languages/introduction).
-You can find all used keys in [kirby-cookieconsent/languages/en.php](https://github.com/zephir/kirby-cookieconsent/blob/main/languages/en.php).
+> For this example we are overriding one string and adding a new category in the sections part of the EN translation.
 
-### 4.2 Extending by PR
+1. Create a new folder in your project. For this example we call it `cc-translations`.
+2. In that folder, create a new file `en.php`.
 
-Fork this repository, copy en/de.php in the [languages](https://github.com/zephir/kirby-cookieconsent/blob/main/languages) folder, translate all values and create a PR. Thanks!
+```php
+<?php
+// site/cc-translations/en.php
+
+return array_replace_recursive(
+    // We assume the plugin was installed as suggested in the installation section of the readme.
+    require_once(__DIR__ . '/../plugins/kirby-cookieconsent/translations/en.php'),
+    [
+        'consentModal' => [
+            'title' => 'Lorem ipsum dolor!', // Override consentModal title
+        ],
+        "preferencesModal" => [
+            "sections" => [
+                [ // Add a new category in sections
+                    "title" => "Custom scripts",
+                    "description" => "Diese Cookies helfen uns, Ihnen personalisierte Werbung oder Marketinginhalte bereitzustellen und deren Leistung zu messen.",
+                    "linkedCategory" => "custom-scripts",
+                ],
+            ]
+        ]
+    ]
+);
+```
+
+3. Now you need to require (or include) this file in `config.php`. Because we want to see the new category `custom-scripts` we also need to update the `categories` option.
+
+```php
+'zephir.cookieconsent' => [
+    'categories' => [
+        'custom-scripts' => []
+    ],
+    'translations' => [
+        'en' => require_once(__DIR__ . '/../cc-translations/en.php')
+    ]
+]
+```
+
+> You can also override the whole translation file by coying the default file and adjusting the values.
+> If you disable a category in the `categories` option you will need to override the `sections` part of the translations to exclude that category.
+> You can also require the default translation and manually alter the array by modifying, adding or deleting entries.
 
 ## 5. Events
 
-The cookieconsent js plugin comes with several callbacks.
-Since you don't have direct access to the js object, you can listen to the callbacks through events.
+You can find all available events in the [CookieConsent Documentation](https://cookieconsent.orestbida.com/advanced/callbacks-events.html#callbacks-and-events).
 
-You can also use the cookieConsentInitialized event, which will give you the cookieconsent object on which you can call functions like `showSettings()`.
-
-```js
-
-// onCookieConsentInitialization
-window.addEventListener(
-    "cookieConsentInitialized",
-    e => console.log("initialized", e.detail.cc)
-)
-
-// onAccept
-window.addEventListener
-    "cookieConsentAccept",
-    e => console.log("accept", e.detail.cookie)
-)
-
-// onChange
-window.addEventListener(
-    "cookieConsentChanged",
-    e => console.log("changed", e.detail.cookie, e.detail.changed_categories)
-)
-
-// onFirstAction
-window.addEventListener(
-    "cookieConsentFirstAction",
-    e => console.log("firstAction", e.detail.cookie, e.detail.user_preferences)
-)
-
-```
-
-You can find more informations regarding the callbacks [here](https://github.com/orestbida/cookieconsent#available-callbacks).
-
-## 6. Practical examples
-
-> The PHP sections in the following sections will refer to the kirby `config.php`.
-
-### 6.1 Revisions
-
-In case of changes to the config, to show the cookie modal to people that already consented, you can use the `revision` option.
-See [cookieconsent#how-to-manage-revision](https://github.com/orestbida/cookieconsent#how-to-manage-revisions).
-
-<details>
-  <summary>Code</summary>
-
-```php
-'zephir.cookieconsent' => [
-    'extend' => [
-        'revision' => 1
-    ]
-]
-```
-
-</details>
-
-### 6.2 Layout customization
-
-See [cookieconsent#layout-options--customization](https://github.com/orestbida/cookieconsent#layout-options--customization).
-
-<details>
-    <summary>Code</summary>
-
-```php
-'zephir.cookieconsent' => [
-    'extend' => [
-        'gui_options' => [
-            'consent_modal' => [
-                'layout' => 'bar',
-                'position' => 'bottom center',
-                'transition' => 'zoom',
-                'swap_buttons' => false
-            ],
-            'settings_modal' => [
-                'layout' => 'bar',
-                'position' => 'left',
-                'transition' => 'zoom'
-            ]
-        ]
-    ]
-]
-```
-
-</details>
-
-### 6.3 Autoclear cookies
-
-See [cookieconsent#how-to-clear-cookies](https://github.com/orestbida/cookieconsent#how-to-clear-cookies).
-
-<details>
-  <summary>Code</summary>
-
-```php
-use Zephir\Cookieconsent\OptionBlocks;
-
-'zephir.cookieconsent' => [
-    'type' => 'customizable',
-    'defaultLocale' => 'en',
-    'activeBlocks' => [
-        'measurement' => false // Disable default measurement block
-    ],
-    'extend' => [
-        'autoclear_cookies' => true,
-        'languages' => [
-            'kirby' => [
-                // Make sure to use "kirby" as language
-                'settings_modal' => [
-                    'cookie_table_headers' => [
-                        ['col1' => 'Name'],
-                        ['col2' => 'Service'],
-                        ['col3' => 'Description'],
-                    ]
-                ]
-            ]
-        ]
-    ]
-],
-'ready' => function () { // Use ready to make use of the OptionBlocks class and kirby t() function
-    return [
-        'zephir.cookieconsent' => [
-            'extend' => [
-                'languages' => [
-                    'kirby' => [
-                        // Make sure to use "kirby" as language
-                        'settings_modal' => [
-                            'blocks' => [
-                                array_merge(
-                                    OptionBlocks::getMeasurement(), // Use the prepared measurement block
-                                    [ // add cookie_table to measurement block
-                                        "cookie_table" => [
-                                            [
-                                                "col1" => '^_ga',
-                                                "col2" => 'Google Analytics',
-                                                "col3" => t('custom.translation', null, option('zephir.cookieconsent.defaultLocale')),
-                                                "is_regex" => true
-                                            ],
-                                            [
-                                                "col1" => '_gid',
-                                                "col2" => 'Google Analytics',
-                                                "col3" => t('custom.translation', null, option('zephir.cookieconsent.defaultLocale')),
-                                            ]
-                                        ]
-                                    ]
-                                )
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ]
-    ];
-}
-```
-
-</details>
+> The CookieConsent object is available through the window object (`window.CookieConsent`).
 
 ## License
 
