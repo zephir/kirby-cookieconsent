@@ -22,9 +22,10 @@ A plugin to implement [cookieconsent](https://github.com/orestbida/cookieconsent
     - [3.1 Available options](#31-available-options)
     - [3.2 Defaults](#32-defaults)
     - [3.3 Predefined cookie categories](#33-predefined-cookie-categories)
-  - [4. Translations](#4-translations)
-    - [4.1 Overriding specific translations](#41-overriding-specific-translations)
-  - [5. Events](#5-events)
+  - [4. Language](#4-language)
+  - [5. Translations](#5-translations)
+    - [5.1 Overriding specific translations](#51-overriding-specific-translations)
+  - [6. Events](#6-events)
   - [License](#license)
   - [Credits](#credits)
 
@@ -69,6 +70,7 @@ Add `snippet('cookieconsentCss')` to your header and `snippet('cookieconsentJs')
 | guiOptions | array | [see below](#32-defaults) | [You can extensively customize both the color scheme and the layout, based on your needs.](https://cookieconsent.orestbida.com/advanced/ui-customization.html) |
 | categories | array | [see below](#32-defaults) | [Use to define your cookie categories.](https://cookieconsent.orestbida.com/reference/configuration-reference.html#categories) |
 | translations | array | [see below](#32-defaults) | An array of translations for each language. |
+| language | array | [see below](#32-defaults) | Defines the language and direction for single language installations. |
 | cdn | boolean | `false` | Whether to load the cookieconsent assets from jsdelivr.net or use the compiled assets provided with this plugin. |
 
 ### 3.2 Defaults
@@ -111,6 +113,10 @@ Add `snippet('cookieconsentCss')` to your header and `snippet('cookieconsentJs')
         'de' => require_once(__DIR__ . '/translations/de.php'),
         'en' => require_once(__DIR__ . '/translations/en.php'),
         'fr' => require_once(__DIR__ . '/translations/fr.php')
+    ],
+    'language' => [
+        'locale' => 'en',
+        'direction' => 'ltr'
     ]
 ]
 ```
@@ -153,12 +159,26 @@ Be aware that disabling a category also requires you to update the translation f
 > An empty array defines the category with the default options. You can pass additional options like `enabled` or `readOnly` in the array.
 > Learn more about those options in the [CookieConsent Documentation](https://cookieconsent.orestbida.com/reference/configuration-reference.html#categories).
 
-## 4. Translations
+## 4. Language
+
+If you have a single language setup (kirby option `languages` not set to `true`), you will have to define the `language` option of the plugin.
+For multi language setups you don't have to do anything, the plugin automatically uses the kirby language or falls back to the first translation in the translations array.
+
+```php
+'zephir.cookieconsent' => [
+    'language' => [
+        'locale' => 'de', // The translation to use, default is en
+        'direction' => 'ltr' // Either ltr or rtl, default is ltr
+    ]
+]
+```
+
+## 5. Translations
 
 The translations are a central part of the plugin. By default we provide translations for EN, DE, FR and the categories mentioned in [3.3 Predefined cookie categories](#33-predefined-cookie-categories).
 To customise or override the default translations, you will need to use the `translations` option.
 
-### 4.1 Overriding specific translations
+### 5.1 Overriding specific translations
 
 > For this example we are overriding one string and adding a new category in the sections part of the EN translation.
 
@@ -206,7 +226,7 @@ return array_replace_recursive(
 > If you disable a category in the `categories` option you will need to override the `sections` part of the translations to exclude that category.
 > You can also require the default translation and manually alter the array by modifying, adding or deleting entries.
 
-## 5. Events
+## 6. Events
 
 You can find all available events in the [CookieConsent Documentation](https://cookieconsent.orestbida.com/advanced/callbacks-events.html#callbacks-and-events).
 

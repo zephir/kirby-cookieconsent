@@ -26,12 +26,39 @@ class Configuration
             'language' => [
                 'default' => 'kirby',
                 'autoDetect' => false,
-                'rtl' => kirby()->language()->direction() === 'rtl',
+                'rtl' => self::isRtl(),
                 'translations' => [
-                    'kirby' => Helpers::getTranslations()
+                    'kirby' => self::getTranslations()
                 ]
             ]
         ];
+    }
+
+    private static function getTranslations()
+    {
+        $translations = kirby()->option('zephir.cookieconsent.translations');
+        $locale = kirby()->option('zephir.cookieconsent.language.locale', 'en');
+
+        if (option('languages')) {
+            $locale = kirby()->language()->code();
+        }
+
+        if (empty($translations[$locale])) {
+            return $translations[array_key_first($translations)];
+        }
+
+        return $translations[$locale];
+    }
+
+    private static function isRtl()
+    {
+        $direction = option('zephir.cookieconsent.language.direction', 'ltr');
+
+        if (option('languages')) {
+            $direction = kirby()->language()->direction();
+        }
+
+        return $direction === 'rtl';
     }
 
 }
