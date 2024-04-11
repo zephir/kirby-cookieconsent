@@ -22,7 +22,7 @@ A plugin to implement [cookieconsent](https://github.com/orestbida/cookieconsent
     - [3.1 Available options](#31-available-options)
     - [3.2 Defaults](#32-defaults)
     - [3.3 Predefined cookie categories](#33-predefined-cookie-categories)
-  - [3.4 Disabling a category](#34-disabling-a-category)
+    - [3.4 Disabling a category](#34-disabling-a-category)
   - [4. Language](#4-language)
   - [5. Translations](#5-translations)
     - [5.1 Overriding specific translations](#51-overriding-specific-translations)
@@ -160,7 +160,7 @@ Be aware that disabling a category also requires you to update the translation f
 > An empty array defines the category with the default options. You can pass additional options like `enabled` or `readOnly` in the array.
 > Learn more about those options in the [CookieConsent Documentation](https://cookieconsent.orestbida.com/reference/configuration-reference.html#categories).
 
-## 3.4 Disabling a category
+### 3.4 Disabling a category
 
 To disable a category you have to remove it from the translations file.
 Follow ["Overriding specific translations"](#51-overriding-specific-translations) to change the translations.
