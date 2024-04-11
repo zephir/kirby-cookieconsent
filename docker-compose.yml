@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  kirby:
+    build:
+      context: ./docker
+    environment:
+      - USERID=${UID}
+    volumes:
+      - ./docker/config.php:/var/www/html/site/config/config.php
+      - ./:/var/www/html/site/plugins/kirby-cookieconsent
+      - ./docker/snippets/header.php:/var/www/html/site/snippets/header.php
+      - ./docker/snippets/footer.php:/var/www/html/site/snippets/footer.php
+    ports:
+      - 7777:80
+    healthcheck:
+      disable: true
