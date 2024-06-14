@@ -4,6 +4,9 @@
 # npm modules
 /node_modules
 
+# editors files
+/.idea
+
 # temp files
 .parcel-cache
 
