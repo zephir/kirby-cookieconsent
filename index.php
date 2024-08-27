@@ -73,7 +73,8 @@ Kirby::plugin('zephir/cookieconsent', [
         'translations' => [
             'de' => require_once(__DIR__ . '/translations/de.php'),
             'en' => require_once(__DIR__ . '/translations/en.php'),
-            'fr' => require_once(__DIR__ . '/translations/fr.php')
+            'fr' => require_once(__DIR__ . '/translations/fr.php'),
+            'pt_PT' => require_once(__DIR__ . '/translations/pt_PT.php')
         ]
     ]
 ]);
