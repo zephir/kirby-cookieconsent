@@ -22,7 +22,7 @@ A plugin to implement [cookieconsent](https://github.com/orestbida/cookieconsent
     - [3.1 Available options](#31-available-options)
     - [3.2 Defaults](#32-defaults)
     - [3.3 Predefined cookie categories](#33-predefined-cookie-categories)
-    - [3.4 Disabling a category](#34-disabling-a-category)
+    - [3.4 Removing a category](#34-removing-a-category)
   - [4. Language](#4-language)
   - [5. Translations](#5-translations)
     - [5.1 Overriding specific translations](#51-overriding-specific-translations)
@@ -81,7 +81,7 @@ Add `snippet('cookieconsentCss')` to your header and `snippet('cookieconsentJs')
     'cdn' => false,
     'revision' => 1,
     'root' => 'document.body',
-    'autoClearCookies' => true, // Only works when the categories has an autoClear array
+    'autoClearCookies' => true, // Only works when the categories have an autoClear array
     'autoShow' => true,
     'hideFromBots' => true,
     'disablePageInteraction' => false,
@@ -137,16 +137,15 @@ Categories that are predefined by this plugin:
 | measurement   | ✅      | Cookies that help to measure traffic and analyze behavior.                                                                           |
 | marketing     | ✅      | These cookies help us to deliver personalized ads or marketing content to you, and to measure their performance.                     |
 
-> Predefined means that there are translations in all languages for each category. The translations essentialy control which categories exist.
+> Predefined means that there are translations in all languages for each category.
 
 To enable/disable categories you can use the `categories` option of the plugin.
-Be aware that disabling a category also requires you to update the translation files.
 
 ```php
 'zephir.cookieconsent' => [
     'categories' => [
         'necessary' => [
-            'enabled' => true,
+            'enabled' => true, // marks the category as enabled by default
             'readOnly' => true
         ],
         'measurement' => [],
@@ -160,15 +159,29 @@ Be aware that disabling a category also requires you to update the translation f
 > An empty array defines the category with the default options. You can pass additional options like `enabled` or `readOnly` in the array.
 > Learn more about those options in the [CookieConsent Documentation](https://cookieconsent.orestbida.com/reference/configuration-reference.html#categories).
 
-### 3.4 Disabling a category
+### 3.4 Removing a category
 
-To disable a category you have to remove it from the translations file.
-Follow ["Overriding specific translations"](#51-overriding-specific-translations) to change the translations.
+To remove a category you have to set its value to `false`.
+
+```php
+'zephir.cookieconsent' => [
+    'categories' => [
+        'necessary' => [
+            'enabled' => true,
+            'readOnly' => true
+        ],
+        'measurement' => [],
+        'functionality' => false, // will not be shown
+        'experience' => false, // will not be shown
+        'marketing' => []
+    ],
+]
+```
 
 ## 4. Language
 
 If you have a single language setup (kirby option `languages` not set to `true`), you will have to define the `language` option of the plugin.
-For multi language setups you don't have to do anything, the plugin automatically uses the kirby language or falls back to the first translation in the translations array.
+For multi-language setups you don't have to do anything, the plugin automatically uses the kirby language or falls back to the first translation in the translations array.
 
 ```php
 'zephir.cookieconsent' => [
@@ -181,7 +194,7 @@ For multi language setups you don't have to do anything, the plugin automaticall
 
 ## 5. Translations
 
-The translations are a central part of the plugin. By default we provide translations for EN, DE, FR and the categories mentioned in [3.3 Predefined cookie categories](#33-predefined-cookie-categories).
+The translations are a central part of the plugin. By default, we provide translations for EN, DE, FR and the categories mentioned in [3.3 Predefined cookie categories](#33-predefined-cookie-categories).
 To customise or override the default translations, you will need to use the `translations` option.
 
 ### 5.1 Overriding specific translations
@@ -228,8 +241,7 @@ return array_replace_recursive(
 ]
 ```
 
-> You can also override the whole translation file by coying the default file and adjusting the values.
-> If you disable a category in the `categories` option you will need to override the `sections` part of the translations to exclude that category.
+> You can override the whole translation file by copying the default file and adjusting the values.
 > You can also require the default translation and manually alter the array by modifying, adding or deleting entries.
 
 ## 6. Events
