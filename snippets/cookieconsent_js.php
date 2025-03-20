@@ -4,4 +4,4 @@
     <?= js('/media/plugins/zephir/cookieconsent/index.js', ['defer' => true]) ?>
 <?php endif; ?>
 
-<?= js((option('languages') ? kirby()->language()->path() : '') . '/cookieconsent.js', ['defer' => true]) ?>
+<?= js((option('languages') && kirby()->language() ? kirby()->language()->path() : '') . '/cookieconsent.js', ['defer' => true]) ?>
