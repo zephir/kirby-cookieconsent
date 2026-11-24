@@ -27,6 +27,7 @@ A plugin to implement [cookieconsent](https://github.com/orestbida/cookieconsent
   - [5. Translations](#5-translations)
     - [5.1 Overriding specific translations](#51-overriding-specific-translations)
   - [6. Events](#6-events)
+  - [7. JavaScript in the config: callbacks, services and regexes](#7-javascript-in-the-config-callbacks-services-and-regexes)
   - [License](#license)
   - [Credits](#credits)
 
@@ -73,6 +74,12 @@ Add `snippet('cookieconsentCss')` to your header and `snippet('cookieconsentJs')
 | translations | array | [see below](#32-defaults) | An array of translations for each language. |
 | language | array | [see below](#32-defaults) | Defines the language and direction for single language installations. |
 | cdn | boolean | `false` | Whether to load the cookieconsent assets from jsdelivr.net or use the compiled assets provided with this plugin. |
+| onFirstConsent | `Js` | – | [Callback run once, on the user's first consent action.](https://cookieconsent.orestbida.com/reference/configuration-reference.html#onfirstconsent) See [7.](#7-javascript-in-the-config-callbacks-services-and-regexes) |
+| onConsent | `Js` | – | [Callback run on the first consent action and on every page load after it.](https://cookieconsent.orestbida.com/reference/configuration-reference.html#onconsent) See [7.](#7-javascript-in-the-config-callbacks-services-and-regexes) |
+| onChange | `Js` | – | [Callback run when the user changes their preferences.](https://cookieconsent.orestbida.com/reference/configuration-reference.html#onchange) See [7.](#7-javascript-in-the-config-callbacks-services-and-regexes) |
+| onModalReady | `Js` | – | [Callback run when a modal is created and appended to the DOM.](https://cookieconsent.orestbida.com/reference/configuration-reference.html#onmodalready) See [7.](#7-javascript-in-the-config-callbacks-services-and-regexes) |
+| onModalShow | `Js` | – | [Callback run when a modal is shown.](https://cookieconsent.orestbida.com/reference/configuration-reference.html#onmodalshow) See [7.](#7-javascript-in-the-config-callbacks-services-and-regexes) |
+| onModalHide | `Js` | – | [Callback run when a modal is hidden.](https://cookieconsent.orestbida.com/reference/configuration-reference.html#onmodalhide) See [7.](#7-javascript-in-the-config-callbacks-services-and-regexes) |
 
 ### 3.2 Defaults
 
@@ -249,6 +256,76 @@ return array_replace_recursive(
 You can find all available events in the [CookieConsent Documentation](https://cookieconsent.orestbida.com/advanced/callbacks-events.html#callbacks-and-events).
 
 > The CookieConsent object is available through the window object (`window.CookieConsent`).
+
+## 7. JavaScript in the config: callbacks, services and regexes
+
+The plugin builds the CookieConsent config in PHP and outputs it as JSON. Most of the config is plain data and works as a normal PHP array, for example a service with a `label` and `cookies` with string names.
+Some parts of the [CookieConsent configuration](https://cookieconsent.orestbida.com/reference/configuration-reference.html) have to be JavaScript: the service callbacks `onAccept`/`onReject`, the root callbacks (`onFirstConsent`, `onConsent`, `onChange`, `onModalReady`, `onModalShow`, `onModalHide`) and cookie names given as a regular expression.
+
+For those, wrap the value in `Zephir\Cookieconsent\Js`. You can use it anywhere in the `zephir.cookieconsent` options:
+
+- `Js::raw('function () { ... }')` outputs the JavaScript expression as is, unquoted.
+- `Js::regex('^_ga')` outputs a regular expression, the same as `/^_ga/`. The pattern is written without the slashes; flags go in the second argument: `Js::regex('^_ga', 'i')`.
+
+Everything else is still JSON encoded.
+
+```php
+<?php
+// site/config/config.php
+
+use Zephir\Cookieconsent\Js;
+
+return [
+    // `ready` runs after the plugins are loaded, so the Js class is available
+    // with every installation method (see the note below)
+    'ready' => fn () => [
+        'zephir.cookieconsent' => [
+            'categories' => [
+                'necessary' => [
+                    'enabled' => true,
+                    'readOnly' => true
+                ],
+                'measurement' => [
+                    // Clears these cookies when the user rejects the category
+                    'autoClear' => [
+                        'cookies' => [
+                            ['name' => Js::regex('^_ga')], // _ga, _ga_XXXXXXXXXX, ...
+                            ['name' => '_gid']
+                        ]
+                    ],
+                    'services' => [
+                        'ga' => [
+                            'label' => 'Google Analytics',
+                            'onAccept' => Js::raw('function () {
+                                // load Google Analytics here
+                            }'),
+                            'onReject' => Js::raw('function () {
+                                // runs when the user turns off this service after accepting it
+                            }'),
+                            'cookies' => [
+                                ['name' => Js::regex('^_ga')]
+                            ]
+                        ]
+                    ]
+                ],
+                'functionality' => [],
+                'experience' => [],
+                'marketing' => []
+            ],
+            'onConsent' => Js::raw('function ({ cookie }) {
+                console.log("Accepted categories:", cookie.categories);
+            }')
+        ]
+    ]
+];
+```
+
+The service shows up as its own toggle in the preferences modal, below the measurement category.
+`onAccept` runs when the service is accepted ("Accept all", or the toggle on) and on every page load after it. `onReject` runs when a service the user had accepted is turned off. With `autoClearCookies` (on by default), the cookies listed in `autoClear` are deleted when the category is rejected, also on "Reject all" at the first visit.
+
+> **Why `ready`?** Kirby reads `config.php` before it loads the plugins. If you installed the plugin with Composer, the `Js` class is autoloaded already and you can use it directly in the `zephir.cookieconsent` option. If you installed it by download or as a git submodule, the class only exists once the plugin is loaded, so put the options that use `Js` in Kirby's [`ready` option](https://getkirby.com/docs/reference/system/options/ready), as above.
+
+`Js::raw()` puts your code into the page unchanged: only use it with your own code, never with content from editors or visitors. The callbacks receive the same arguments as in the [CookieConsent documentation](https://cookieconsent.orestbida.com/advanced/callbacks-events.html#callbacks-and-events).
 
 ## License
 
