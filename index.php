@@ -42,7 +42,7 @@ Kirby::plugin('zephir/cookieconsent', [
         // CookieConsent options
         // Root options
         'revision' => 1,
-        'root' => 'document.body',
+        'root' => 'body', // CSS selector of the element the modal is appended to
         'autoClearCookies' => true, // Only works when the categories has an autoClear array
         'autoShow' => true,
         'hideFromBots' => true,

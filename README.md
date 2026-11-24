@@ -99,7 +99,7 @@ What you can do:
 
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
-| root | string | `"document.body"` | [Root (parent) element where the modal will be appended as a last child.](https://cookieconsent.orestbida.com/reference/configuration-reference.html#root) |
+| root | string | `"body"` | [Root (parent) element where the modal will be appended as a last child.](https://cookieconsent.orestbida.com/reference/configuration-reference.html#root) |
 | autoShow | boolean | `true` | [Automatically show the consent modal if consent is not valid.](https://cookieconsent.orestbida.com/reference/configuration-reference.html#autoshow) |
 | revision | integer | `1` | [Manages consent revisions; useful if you'd like to ask your users again for consent after a change in your cookie/privacy policy.](https://cookieconsent.orestbida.com/advanced/revision-management.html#enable-revisions) |
 | autoClearCookies | boolean | `true` | [Clears cookies when user rejects a specific category. It requires a valid autoClear array.](https://cookieconsent.orestbida.com/reference/configuration-reference.html#autoclearcookies) |
@@ -124,7 +124,7 @@ What you can do:
 'zephir.cookieconsent' => [
     'cdn' => false,
     'revision' => 1,
-    'root' => 'document.body',
+    'root' => 'body', // a CSS selector
     'autoClearCookies' => true, // Only works when the categories have an autoClear array
     'autoShow' => true,
     'hideFromBots' => true,
@@ -155,9 +155,13 @@ What you can do:
         'marketing' => []
     ],
     'translations' => [
-        'de' => require_once(__DIR__ . '/translations/de.php'),
-        'en' => require_once(__DIR__ . '/translations/en.php'),
-        'fr' => require_once(__DIR__ . '/translations/fr.php')
+        'de' => require(__DIR__ . '/translations/de.php'),
+        'en' => require(__DIR__ . '/translations/en.php'),
+        'fr' => require(__DIR__ . '/translations/fr.php'),
+        'nl' => require(__DIR__ . '/translations/nl.php'),
+        'es' => require(__DIR__ . '/translations/es.php'),
+        'ca' => require(__DIR__ . '/translations/ca.php'),
+        'pt_PT' => require(__DIR__ . '/translations/pt_PT.php')
     ],
     'language' => [
         'locale' => 'en',
