@@ -71,13 +71,13 @@ Kirby::plugin('zephir/cookieconsent', [
 
         // Language options
         'translations' => [
-            'de' => require_once(__DIR__ . '/translations/de.php'),
-            'en' => require_once(__DIR__ . '/translations/en.php'),
-            'fr' => require_once(__DIR__ . '/translations/fr.php'),
-            'nl' => require_once(__DIR__ . '/translations/nl.php'),
-            'es' => require_once(__DIR__ . '/translations/es.php'),
-            'ca' => require_once(__DIR__ . '/translations/ca.php'),
-            'pt_PT' => require_once(__DIR__ . '/translations/pt_PT.php')
+            'de' => require(__DIR__ . '/translations/de.php'),
+            'en' => require(__DIR__ . '/translations/en.php'),
+            'fr' => require(__DIR__ . '/translations/fr.php'),
+            'nl' => require(__DIR__ . '/translations/nl.php'),
+            'es' => require(__DIR__ . '/translations/es.php'),
+            'ca' => require(__DIR__ . '/translations/ca.php'),
+            'pt_PT' => require(__DIR__ . '/translations/pt_PT.php')
         ]
     ]
 ]);

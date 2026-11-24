@@ -13,6 +13,10 @@ class Configuration
     {
         $categories = self::getCategories();
 
+        // the resolved translation key (e.g. `de`, `pt_PT`) doubles as the
+        // cookieconsent language code, which ends up in the consent cookie
+        $language = self::translationKey();
+
         return [
             'categories' => $categories,
             'guiOptions' => kirby()->option('zephir.cookieconsent.guiOptions'),
@@ -24,11 +28,12 @@ class Configuration
             'disablePageInteraction' => kirby()->option('zephir.cookieconsent.disablePageInteraction'),
             'lazyHtmlGeneration' => kirby()->option('zephir.cookieconsent.lazyHtmlGeneration'),
             'language' => [
-                'default' => 'kirby',
+                'default' => $language,
                 'autoDetect' => false,
-                'rtl' => self::isRtl(),
+                // cookieconsent expects the language code(s) that are rtl, not a boolean
+                'rtl' => self::isRtl() ? $language : null,
                 'translations' => [
-                    'kirby' => self::syncTranslations($categories)
+                    $language => self::syncTranslations($categories)
                 ]
             ]
         ];
@@ -79,29 +84,131 @@ class Configuration
         return $translations;
     }
 
-    private static function getTranslations()
+    /**
+     * Get the plugin translation for the current language.
+     *
+     * The translation key is resolved in this order:
+     * 1. the locale of the current Kirby language (e.g. `pt_PT`; `pt_PT.UTF-8` and `pt-PT` match too)
+     * 2. the code of the current Kirby language (e.g. `pt`)
+     * 3. a translation for the same base language (e.g. `pt` or `pt_BR` → `pt_PT`)
+     * 4. the `language.locale` option, then `en`, then the first registered translation
+     *
+     * On single-language sites the `language.locale` option takes the place of 1. and 2.
+     */
+    private static function getTranslations(): array
     {
-        $translations = kirby()->option('zephir.cookieconsent.translations');
-        $locale = kirby()->option('zephir.cookieconsent.language.locale', 'en');
-
-        if (option('languages')) {
-            $locale = kirby()->language()->code();
-        }
-
-        if (empty($translations[$locale])) {
-            return $translations[array_key_first($translations)];
-        }
-
-        return $translations[$locale];
+        return self::translations()[self::translationKey()] ?? [];
     }
 
-    private static function isRtl()
+    private static function translations(): array
     {
-        $direction = option('zephir.cookieconsent.language.direction', 'ltr');
+        return array_filter(
+            kirby()->option('zephir.cookieconsent.translations', []),
+            'is_array'
+        );
+    }
 
-        if (option('languages')) {
-            $direction = kirby()->language()->direction();
+    private static function translationKey(): string
+    {
+        return (string)(self::resolveTranslationKey(array_keys(self::translations())) ?? 'en');
+    }
+
+    private static function resolveTranslationKey(array $keys): int|string|null
+    {
+        $optionLocale = kirby()->option('zephir.cookieconsent.language.locale');
+        $language = kirby()->language();
+
+        if ($language !== null) {
+            $candidates = [...self::languageLocales($language), $language->code()];
+            $fallbacks = [$optionLocale, 'en'];
+        } else {
+            $candidates = [$optionLocale ?? 'en'];
+            $fallbacks = ['en'];
         }
+
+        $candidates = array_filter($candidates, 'is_string');
+        $fallbacks = array_filter($fallbacks, 'is_string');
+
+        return self::matchKey($keys, $candidates)
+            ?? self::matchBaseLanguage($keys, $candidates)
+            ?? self::matchKey($keys, $fallbacks)
+            ?? $keys[0] ?? null;
+    }
+
+    /**
+     * All locale strings of a Kirby language, LC_ALL first
+     */
+    private static function languageLocales(\Kirby\Cms\Language $language): array
+    {
+        $locales = $language->locale();
+        $all = $locales[LC_ALL] ?? null;
+        unset($locales[LC_ALL]);
+
+        $flat = [];
+        array_walk_recursive($locales, function ($locale) use (&$flat) {
+            $flat[] = $locale;
+        });
+
+        return [...(array)$all, ...$flat];
+    }
+
+    /**
+     * Find the first candidate that matches a translation key,
+     * exactly or after normalisation (`pt-PT`, `pt_PT.UTF-8`, `pt_pt` → `pt_PT`)
+     */
+    private static function matchKey(array $keys, array $candidates): int|string|null
+    {
+        foreach ($candidates as $candidate) {
+            if (in_array($candidate, $keys, true)) {
+                return $candidate;
+            }
+
+            foreach ($keys as $key) {
+                if (self::normalizeLocale((string)$key) === self::normalizeLocale($candidate)) {
+                    return $key;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Find a translation for the same base language as one of the candidates,
+     * e.g. `pt` or `pt_BR` → `pt_PT`, `de_CH` → `de`
+     */
+    private static function matchBaseLanguage(array $keys, array $candidates): int|string|null
+    {
+        foreach ($candidates as $candidate) {
+            $base = self::baseLanguage($candidate);
+
+            foreach ($keys as $key) {
+                if (self::baseLanguage((string)$key) === $base) {
+                    return $key;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static function normalizeLocale(string $locale): string
+    {
+        // strip the codeset and modifier, e.g. `pt_PT.UTF-8@euro` → `pt_PT`
+        $locale = preg_replace('/[.@].*$/', '', $locale);
+
+        return strtolower(str_replace('-', '_', trim($locale)));
+    }
+
+    private static function baseLanguage(string $locale): string
+    {
+        return explode('_', self::normalizeLocale($locale))[0];
+    }
+
+    private static function isRtl(): bool
+    {
+        $direction = kirby()->language()?->direction()
+            ?? kirby()->option('zephir.cookieconsent.language.direction', 'ltr');
 
         return $direction === 'rtl';
     }

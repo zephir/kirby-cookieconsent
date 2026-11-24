@@ -192,8 +192,18 @@ Up to version 3 of this plugin, "Accept all" also stored removed categories in t
 
 ## 4. Language
 
-If you have a single language setup (kirby option `languages` not set to `true`), you will have to define the `language` option of the plugin.
-For multi-language setups you don't have to do anything, the plugin automatically uses the kirby language or falls back to the first translation in the translations array.
+The plugin picks one of the registered [translations](#5-translations) for the current page.
+
+**Multi-language sites** (kirby option `languages` set to `true`) need no setup. The translation is chosen from the current Kirby language, in this order:
+
+1. The language's locale, e.g. `pt_PT` for a language with `'locale' => 'pt_PT.UTF-8'`. Codeset and modifier are ignored and `-` matches `_`, so `pt_PT.UTF-8`, `pt-PT` and `pt_pt` all find the `pt_PT` translation.
+2. The language's code, e.g. `de`.
+3. A translation for the same base language, e.g. a language `pt` or `pt_BR` uses `pt_PT`, and `de_CH` uses `de`.
+4. The fallback: the `language.locale` option below if you set it, else `en`, else the first registered translation.
+
+The text direction follows the Kirby language's `direction`.
+
+**Single-language sites** (or `languages` on but no language created yet) use the `language` option. `locale` is matched the same way (steps 1, 3 and 4), so `de_CH` uses `de`.
 
 ```php
 'zephir.cookieconsent' => [
@@ -204,10 +214,14 @@ For multi-language setups you don't have to do anything, the plugin automaticall
 ]
 ```
 
+On multi-language sites `language.locale` is only used as the fallback, for languages without a matching translation.
+
 ## 5. Translations
 
-The translations are a central part of the plugin. By default, we provide translations for EN, DE, FR and the categories mentioned in [3.3 Predefined cookie categories](#33-predefined-cookie-categories).
-To customise or override the default translations, you will need to use the `translations` option.
+The translations are a central part of the plugin. By default, we provide translations for `en`, `de`, `fr`, `nl`, `es`, `ca` and `pt_PT`, and for the categories mentioned in [3.3 Predefined cookie categories](#33-predefined-cookie-categories).
+To customise or override the default translations, or to add a language, you will need to use the `translations` option.
+
+Each translation is registered under a key, which is matched against your languages as described in [4. Language](#4-language). Use the language code (`'de' => ...`) or a locale (`'pt_BR' => ...`). When both match, the locale key wins: a language `pt` with locale `pt_PT` uses the `pt_PT` translation even if you also registered `'pt' => ...`, so override a shipped translation under its own key (`pt_PT`).
 
 ### 5.1 Overriding specific translations
 
@@ -222,7 +236,7 @@ To customise or override the default translations, you will need to use the `tra
 
 return array_replace_recursive(
     // We assume the plugin was installed as suggested in the installation section of the readme.
-    require_once(__DIR__ . '/../plugins/kirby-cookieconsent/translations/en.php'),
+    require(__DIR__ . '/../plugins/kirby-cookieconsent/translations/en.php'),
     [
         'consentModal' => [
             'title' => 'Lorem ipsum dolor!', // Override consentModal title
@@ -248,7 +262,7 @@ return array_replace_recursive(
         'custom-scripts' => []
     ],
     'translations' => [
-        'en' => require_once(__DIR__ . '/../cc-translations/en.php')
+        'en' => require(__DIR__ . '/../cc-translations/en.php')
     ]
 ]
 ```
