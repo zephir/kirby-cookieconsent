@@ -14,6 +14,7 @@ A plugin to implement [cookieconsent](https://github.com/orestbida/cookieconsent
 - [Kirby Cookieconsent plugin](#kirby-cookieconsent-plugin)
   - [Table of Contents](#table-of-contents)
   - [Requirements](#requirements)
+  - [Upgrading from 3.x to 4.0](#upgrading-from-3x-to-40)
   - [1. Installation](#1-installation)
     - [1.1 Composer](#11-composer)
     - [1.2 Download](#12-download)
@@ -41,6 +42,17 @@ A plugin to implement [cookieconsent](https://github.com/orestbida/cookieconsent
 - PHP 8.1 or newer (and the PHP version your Kirby release requires)
 
 Version 4 of this plugin drops support for Kirby 3. If you are still on Kirby 3, stay on version 3.x of this plugin.
+
+## Upgrading from 3.x to 4.0
+
+- **Requirements:** Kirby 4, 5 or 6 and PHP 8.1+. Composer refuses to install 4.x into a Kirby 3 site.
+- **cookieconsent 3.3.0:** the bundled library moves from 3.0.0 to 3.3.0 (also in `cdn` mode). Its markup and CSS changed slightly (accessibility fixes), so re-check custom CSS for `#cc-main`. Source maps are no longer shipped.
+- **Asset URLs:** CSS and JS are linked through Kirby's plugin asset API (`/media/plugins/zephir/cookieconsent/<hash>/index.js`), bypassing `css()`/`js()` components such as cachebuster plugins. With Kirby's pages cache on, clear the cache after updating the plugin. `/cookieconsent.js` now has a `?v=` query that changes with the config. See [2.1](#21-how-the-assets-are-loaded).
+- **Removed categories:** a category set to `false` is no longer passed to cookieconsent, so "Accept all" no longer stores it. Visitors who accepted before keep it in their cookie until you increase `revision`. A preferences section whose `linkedCategory` is not in `categories` is now hidden too. See [3.4](#34-removing-a-category).
+- **Language:** the translation is picked by the Kirby language's locale first (`pt_PT`), then its code (`pt`), then the same base language, then the `language.locale` option, then `en`. A custom translation registered under the code (e.g. `'pt'`) now loses to a shipped one for the locale (`pt_PT`): move it to the locale key. Unmatched languages fall back to English instead of German. The cookieconsent language key (and the consent cookie's `languageCode`) is now the translation key (`de`, `pt_PT`) instead of `kirby`. See [4.](#4-language)
+- **Translation files** are loaded with `require` instead of `require_once`. Use `require` in your own overrides too (see [5.1](#51-overriding-specific-translations)).
+- **JavaScript in the config:** callbacks, service `onAccept`/`onReject` and cookie-name regexes are now possible with `Js::raw()` and `Js::regex()`. Root callback options must be `Js` values; plain strings throw an exception. See [7.](#7-javascript-in-the-config-callbacks-services-and-regexes)
+- **`root`** now defaults to `'body'` (the old `'document.body'` never matched anything and only worked through the library's fallback).
 
 ## 1. Installation
 
