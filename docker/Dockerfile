@@ -1,8 +1,11 @@
-# Use latest offical ubuntu image
-FROM ubuntu:latest
+# Ubuntu LTS (26.04 "Resolute Raccoon", ships PHP 8.5)
+FROM ubuntu:26.04
+
+# Kirby Starterkit version (git tag of getkirby/starterkit) to test against
+ARG KIRBY_VERSION=6.0.0
 
 # Add composer
-COPY --from=composer /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Set timezone environment variable
 ENV TZ=Europe/Berlin
@@ -26,7 +29,6 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   php-dom \
   php-gd \
   php-intl \
-  php-json \
   php-mbstring \
   php-xml \
   php-zip && \
@@ -39,7 +41,7 @@ COPY default.conf /etc/apache2/sites-available/000-default.conf
 RUN rm /var/www/html/*
 
 # Clone the Kirby Starterkit
-RUN git clone --depth 1 https://github.com/getkirby/starterkit.git /var/www/html
+RUN git clone --depth 1 --branch "${KIRBY_VERSION}" https://github.com/getkirby/starterkit.git /var/www/html
 
 # Fix files and directories ownership
 RUN chown -R www-data:www-data /var/www/html/

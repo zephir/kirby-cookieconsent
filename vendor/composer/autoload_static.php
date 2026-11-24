@@ -4,25 +4,25 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7fa38c6066bdacd072599292a62c908c
+class ComposerStaticInit9d6be5ad46e0e02caededc4c553d87a2
 {
     public static $prefixLengthsPsr4 = array (
-        'Z' => 
+        'Z' =>
         array (
             'Zephir\\Cookieconsent\\' => 21,
         ),
-        'K' => 
+        'K' =>
         array (
             'Kirby\\' => 6,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Zephir\\Cookieconsent\\' => 
+        'Zephir\\Cookieconsent\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
-        'Kirby\\' => 
+        'Kirby\\' =>
         array (
             0 => __DIR__ . '/..' . '/getkirby/composer-installer/src',
         ),
@@ -34,17 +34,15 @@ class ComposerStaticInit7fa38c6066bdacd072599292a62c908c
         'Kirby\\ComposerInstaller\\Installer' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',
         'Kirby\\ComposerInstaller\\Plugin' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',
         'Kirby\\ComposerInstaller\\PluginInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/PluginInstaller.php',
-        'Zephir\\Cookieconsent\\Helpers' => __DIR__ . '/../..' . '/src/Helpers.php',
-        'Zephir\\Cookieconsent\\OptionBlocks' => __DIR__ . '/../..' . '/src/OptionBlocks.php',
-        'Zephir\\Cookieconsent\\Options' => __DIR__ . '/../..' . '/src/Options.php',
+        'Zephir\\Cookieconsent\\Configuration' => __DIR__ . '/../..' . '/src/Configuration.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7fa38c6066bdacd072599292a62c908c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7fa38c6066bdacd072599292a62c908c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7fa38c6066bdacd072599292a62c908c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9d6be5ad46e0e02caededc4c553d87a2::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9d6be5ad46e0e02caededc4c553d87a2::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9d6be5ad46e0e02caededc4c553d87a2::$classMap;
 
         }, null, ClassLoader::class);
     }

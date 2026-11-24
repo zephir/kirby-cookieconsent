@@ -1,5 +1,5 @@
 {
-  "name": "kirby3-cookieconsent",
+  "name": "kirby-cookieconsent",
   "version": "1.0.0",
   "author": "Marc Stampfli <marc@zephir.ch>",
   "scripts": {
@@ -7,9 +7,9 @@
     "build": "parcel build ./assets/src/index.js --dist-dir ./assets --no-source-maps"
   },
   "devDependencies": {
-    "parcel": "^2.1.1"
+    "parcel": "^2.16.4"
   },
   "dependencies": {
-    "vanilla-cookieconsent": "^3.0.0"
+    "vanilla-cookieconsent": "^3.3.0"
   }
 }
