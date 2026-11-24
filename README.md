@@ -18,6 +18,8 @@ A plugin to implement [cookieconsent](https://github.com/orestbida/cookieconsent
     - [1.2 Download](#12-download)
     - [1.3 Git submodule](#13-git-submodule)
   - [2. Setup](#2-setup)
+    - [2.1 How the assets are loaded](#21-how-the-assets-are-loaded)
+    - [2.2 Troubleshooting: 403 on /media/plugins/zephir/cookieconsent/...](#22-troubleshooting-403-on-mediapluginszephircookieconsent)
   - [3. Options](#3-options)
     - [3.1 Available options](#31-available-options)
     - [3.2 Defaults](#32-defaults)
@@ -55,6 +57,33 @@ git submodule add https://github.com/zephir/kirby-cookieconsent.git site/plugins
 
 Add `snippet('cookieconsentCss')` to your header and `snippet('cookieconsentJs')` to your footer.
 
+### 2.1 How the assets are loaded
+
+The snippets output three tags:
+
+```html
+<link rel="stylesheet" href="https://example.com/media/plugins/zephir/cookieconsent/4205341454-1732460000/index.css">
+<script defer src="https://example.com/media/plugins/zephir/cookieconsent/2046731778-1732460000/index.js"></script>
+<script defer src="https://example.com/cookieconsent.js?v=99b40bdf"></script>
+```
+
+- `index.css` and `index.js` are the compiled cookieconsent library. They are Kirby plugin assets, so their URLs come from Kirby (`$kirby->plugin('zephir/cookieconsent')->asset('index.js')->url()`) and contain a hash that changes when the files change. Kirby links them into `media/plugins` on the first request, so an empty or deleted `media` folder is fine.
+- `/cookieconsent.js` is the configuration built from your options. The `v` parameter changes whenever your options change, so visitors get the new configuration right away (for example after you raise `revision`). On multi-language sites the URL starts with the language prefix (`/de/cookieconsent.js`).
+- The tags are written directly, not through Kirby's `css()`/`js()` helpers. That way cache-buster plugins such as [schnti/cachebuster](https://github.com/schnti/kirby3-cachebuster) leave these URLs alone; they are already versioned.
+- With `'cdn' => true`, the library comes from jsDelivr (cookieconsent v3.3.0, pinned with Subresource Integrity hashes) and `/media/plugins` is not used. The configuration script is always served by your site.
+
+If you use Kirby's pages cache, clear it after updating the plugin, as after any deploy. Cached pages otherwise still point to the hash of the old files.
+
+### 2.2 Troubleshooting: 403 on `/media/plugins/zephir/cookieconsent/...`
+
+Kirby publishes plugin assets by creating a symlink in `media/plugins/` that points to the file in `site/plugins/kirby-cookieconsent/assets/`. The first request is answered by Kirby itself; later requests are served by the web server through that symlink. On some shared hosts (reported on Mittwald), PHP sees the site under a different path than the web server (for example `/html/...` instead of `/home/www/p123456/html/...`). The symlink then points to a path the web server cannot resolve, and Apache answers `403 Forbidden` ("Symbolic link not allowed or link target not accessible"). This happens to every Kirby plugin's frontend assets on such a host, and the plugin cannot change how Kirby creates the symlink. Adding `Options +FollowSymLinks` does not help here.
+
+What you can do:
+
+- Ask your host to make the paths match, or to follow these symlinks.
+- Use `'zephir.cookieconsent.cdn' => true` to load the library from jsDelivr. Note that jsDelivr is a third party; check whether that fits your privacy policy.
+- Host the two files yourself: copy `assets/index.css` and `assets/index.js` from the plugin into your own `assets` folder. Then copy the plugin's `snippets/cookieconsent_css.php` and `snippets/cookieconsent_js.php` to `site/snippets/cookieconsentCss.php` and `site/snippets/cookieconsentJs.php` (your snippets take precedence over the plugin's), and replace the asset URL in them with yours, e.g. `url('assets/cookieconsent/index.js')`. You need to copy the files again after each plugin update.
+
 ## 3. Options
 
 ### 3.1 Available options
@@ -72,7 +101,7 @@ Add `snippet('cookieconsentCss')` to your header and `snippet('cookieconsentJs')
 | categories | array | [see below](#32-defaults) | [Use to define your cookie categories.](https://cookieconsent.orestbida.com/reference/configuration-reference.html#categories) |
 | translations | array | [see below](#32-defaults) | An array of translations for each language. |
 | language | array | [see below](#32-defaults) | Defines the language and direction for single language installations. |
-| cdn | boolean | `false` | Whether to load the cookieconsent assets from jsdelivr.net or use the compiled assets provided with this plugin. |
+| cdn | boolean | `false` | Whether to load the cookieconsent library (v3.3.0) from jsdelivr.net or use the compiled assets provided with this plugin. See [2.1](#21-how-the-assets-are-loaded). |
 
 ### 3.2 Defaults
 
