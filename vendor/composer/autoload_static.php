@@ -35,6 +35,7 @@ class ComposerStaticInit9d6be5ad46e0e02caededc4c553d87a2
         'Kirby\\ComposerInstaller\\Plugin' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',
         'Kirby\\ComposerInstaller\\PluginInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/PluginInstaller.php',
         'Zephir\\Cookieconsent\\Configuration' => __DIR__ . '/../..' . '/src/Configuration.php',
+        'Zephir\\Cookieconsent\\Js' => __DIR__ . '/../..' . '/src/Js.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
