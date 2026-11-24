@@ -178,6 +178,10 @@ To remove a category you have to set its value to `false`.
 ]
 ```
 
+A removed category is not passed to CookieConsent at all: its section is hidden in the preferences modal, and neither "Accept all" button stores it in the consent cookie.
+
+Up to version 3 of this plugin, "Accept all" also stored removed categories in the cookie. Visitors who accepted under that behaviour keep these extra categories in their cookie until they consent again. To ask them for consent again, increase the `revision` option.
+
 ## 4. Language
 
 If you have a single language setup (kirby option `languages` not set to `true`), you will have to define the `language` option of the plugin.

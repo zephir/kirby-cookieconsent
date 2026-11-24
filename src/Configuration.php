@@ -11,7 +11,7 @@ class Configuration
 
     public static function get()
     {
-        $categories = kirby()->option('zephir.cookieconsent.categories');
+        $categories = self::getCategories();
 
         return [
             'categories' => $categories,
@@ -35,6 +35,24 @@ class Configuration
     }
 
     /**
+     * Get the active categories. A category set to `false` is removed
+     * completely, so the library never knows about it and "Accept all"
+     * cannot store it in the consent cookie.
+     */
+    private static function getCategories(): array
+    {
+        $categories = kirby()->option('zephir.cookieconsent.categories', []);
+        $categories = array_filter($categories, fn ($category) => $category !== false);
+
+        // An empty array means "category with default settings". A category is
+        // an object in the library's config, so encode `[]` as `{}`
+        return array_map(
+            fn ($category) => $category === [] ? new \stdClass() : $category,
+            $categories
+        );
+    }
+
+    /**
      * Get translations filtered according to active categories only
      */
     private static function syncTranslations(array $categories): array
@@ -50,8 +68,8 @@ class Configuration
                 continue;
             }
 
-            // if category exists and is false, remove translation section
-            if (isset($categories[$linkedCategory]) && $categories[$linkedCategory] === false) {
+            // if the linked category is not active, remove translation section
+            if (array_key_exists($linkedCategory, $categories) === false) {
                 unset($sections[$key]);
             }
         }
