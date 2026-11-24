@@ -2,6 +2,12 @@
 
 ![cover](docs/cover.png)
 
+> [!IMPORTANT]
+> **Looking for a maintainer:** we're looking for someone to take over this repository. If you're interested, please [open an issue](https://github.com/zephir/kirby-cookieconsent/issues).
+
+> [!NOTE]
+> Claude (an AI assistant) was used to optimize the code of this plugin. All changes were validated by a human.
+
 A plugin to implement [cookieconsent](https://github.com/orestbida/cookieconsent) in Kirby.
 
 - Uses the open source cookieconsent library
