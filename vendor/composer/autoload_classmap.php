@@ -11,7 +11,5 @@ return array(
     'Kirby\\ComposerInstaller\\Installer' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',
     'Kirby\\ComposerInstaller\\Plugin' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',
     'Kirby\\ComposerInstaller\\PluginInstaller' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/PluginInstaller.php',
-    'Zephir\\Cookieconsent\\Helpers' => $baseDir . '/src/Helpers.php',
-    'Zephir\\Cookieconsent\\OptionBlocks' => $baseDir . '/src/OptionBlocks.php',
-    'Zephir\\Cookieconsent\\Options' => $baseDir . '/src/Options.php',
+    'Zephir\\Cookieconsent\\Configuration' => $baseDir . '/src/Configuration.php',
 );

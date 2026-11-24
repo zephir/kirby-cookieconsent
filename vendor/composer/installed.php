@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
-        'name' => 'getkirby/pluginkit',
-        'pretty_version' => '1.0.0',
-        'version' => '1.0.0.0',
-        'reference' => NULL,
+        'name' => 'zephir/kirby-cookieconsent',
+        'pretty_version' => '3.2.1',
+        'version' => '3.2.1.0',
+        'reference' => null,
         'type' => 'kirby-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -19,10 +19,10 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
-        'getkirby/pluginkit' => array(
-            'pretty_version' => '1.0.0',
-            'version' => '1.0.0.0',
-            'reference' => NULL,
+        'zephir/kirby-cookieconsent' => array(
+            'pretty_version' => '3.2.1',
+            'version' => '3.2.1.0',
+            'reference' => null,
             'type' => 'kirby-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
