@@ -1,9 +1,9 @@
-version: '3'
-
 services:
   kirby:
     build:
       context: ./docker
+      args:
+        KIRBY_VERSION: ${KIRBY_VERSION:-6.0.0}
     environment:
       - USERID=${UID}
     volumes:
