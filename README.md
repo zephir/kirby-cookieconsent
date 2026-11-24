@@ -6,13 +6,14 @@ A plugin to implement [cookieconsent](https://github.com/orestbida/cookieconsent
 
 - Uses the open source cookieconsent library
 - Provides default translations for 5 cookie categories
-- Multilingual support (EN/DE/FR)
+- Multilingual support (EN/DE/FR/NL/ES/CA/PT-PT)
 - Customizable
 
 ## Table of Contents
 
 - [Kirby Cookieconsent plugin](#kirby-cookieconsent-plugin)
   - [Table of Contents](#table-of-contents)
+  - [Requirements](#requirements)
   - [1. Installation](#1-installation)
     - [1.1 Composer](#11-composer)
     - [1.2 Download](#12-download)
@@ -30,6 +31,13 @@ A plugin to implement [cookieconsent](https://github.com/orestbida/cookieconsent
   - [License](#license)
   - [Credits](#credits)
 
+
+## Requirements
+
+- Kirby 4, 5 or 6
+- PHP 8.1 or newer (and the PHP version your Kirby release requires)
+
+Version 4 of this plugin drops support for Kirby 3. If you are still on Kirby 3, stay on version 3.x of this plugin.
 
 ## 1. Installation
 
