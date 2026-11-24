@@ -8,6 +8,12 @@ use Kirby\Http\Response;
 use Zephir\Cookieconsent\Configuration;
 
 Kirby::plugin('zephir/cookieconsent', [
+    // Only these files are published to /media/plugins/zephir/cookieconsent
+    // (the sources in assets/src and the source maps stay private)
+    'assets' => [
+        'index.css' => __DIR__ . '/assets/index.css',
+        'index.js' => __DIR__ . '/assets/index.js'
+    ],
     'snippets' => [
         'cookieconsentJs' => __DIR__ . '/snippets/cookieconsent_js.php',
         'cookieconsentCss' => __DIR__ . '/snippets/cookieconsent_css.php'
