@@ -28,5 +28,10 @@
             "getkirby/composer-installer": true
         },
         "platform-check": false
+    },
+    "extra": {
+        "kirby": {
+            "compatible": "^4.0 || ^5.0 || ^6.0"
+        }
     }
 }
